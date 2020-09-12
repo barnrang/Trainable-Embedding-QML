@@ -1,0 +1,38 @@
+qrac_bc:
+    epochs: 200
+    positive_factor: 1
+    depth: 1
+    seed: 10598
+te_bc:
+    epochs: 200
+    positive_factor: 1
+    depth: 1
+    seed: 700
+
+te_reg_bc:
+    epochs: 200
+    positive_factor: 1
+    depth: 1
+    seed: 666
+    reg: 0.02
+
+qrac_ts:
+    epochs: 300
+    positive_factor: 0.33
+    depth: 4
+    seed: 10598
+
+te_reg_ts:
+    epochs: 300
+    positive_factor: 0.33
+    depth: 4
+    seed: 10598
+
+te_reg_ts:
+    epochs: 300
+    positive_factor: 0.33
+    depth: 4
+    seed: 666
+    reg: 0.02
+
+
