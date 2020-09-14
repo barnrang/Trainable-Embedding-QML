@@ -182,7 +182,7 @@ class MyVQC(VQAlgorithm):
             # Set input to varform
             try:
                 qc += self._var_form.construct_circuit(x, theta, qr)
-            except:
+            except TypeError:
                 qc += self._var_form.construct_circuit(theta, qr)
 
         if measurement:

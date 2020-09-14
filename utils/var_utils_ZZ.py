@@ -117,13 +117,8 @@ class MyRYRZ(VariationalForm):
         Raises:
             ValueError: the number of parameters is incorrect.
         """
-        # print(len(parameters))
         if len(parameters) != self._num_parameters:
             raise ValueError('The number of parameters has to be {}'.format(self._num_parameters))
-
-        #print(x)
-
-        # print(x)
 
         if len(x) != 3 * self._num_dis:
             raise ValueError('The length of the bitstring should be num_qubit * 3')
