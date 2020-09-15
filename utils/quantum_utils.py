@@ -12,6 +12,26 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score
 
+def convert_to_angle(b_st):
+    if b_st[0] == 1:
+        theta = np.arccos(1/np.sqrt(3))
+    else:
+        theta = np.arccos(-1/np.sqrt(3))
+
+    if b_st[1] == 1 and b_st[2] == 1:
+        varphi = np.pi / 4
+
+    if b_st[1] == 1 and b_st[2] == 0:
+        varphi = 3 * np.pi / 4
+
+    if b_st[1] == 0 and b_st[2] == 0:
+        varphi = -3 * np.pi / 4
+
+    if b_st[1] == 0 and b_st[2] == 1:
+        varphi = -np.pi / 4
+
+    return [theta, varphi]
+
 def encoder_3bits_1qubit(df_q):
     data = []
 
@@ -37,27 +57,7 @@ def encoder_3bits_1qubit(df_q):
             var_list = []
             for i in range(num_qubit):
                 b_st = all_b_st[i * 3: (i + 1) * 3]
-
-                # b_st = b_1, b_2, b_3 = \sqrt{3}r_x, \sqrt{3}r_y, \sqrt{3}r_z
-
-                if b_st[0] == '1':
-                    theta = np.arccos(1 / np.sqrt(3))
-                else:
-                    theta = np.arccos(-1 / np.sqrt(3))
-
-                if b_st[1] == '1' and b_st[2] == '1':
-                    varphi = np.pi / 4
-
-                if b_st[1] == '1' and b_st[2] == '0':
-                    varphi = 3 * np.pi / 4
-
-                if b_st[1] == '0' and b_st[2] == '0':
-                    varphi = -3 * np.pi / 4
-
-                if b_st[1] == '0' and b_st[2] == '1':
-                    varphi = -np.pi / 4
-
-                var_list += [theta, varphi]
+                var_list += convert_to_angle(b_st)
 
             features.append(var_list)
         #         print(size, var_list)
