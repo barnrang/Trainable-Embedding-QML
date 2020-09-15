@@ -28,8 +28,8 @@ set_qiskit_aqua_logging(logging.DEBUG)
 
 def run_exp(
     method='qrac',
-    epochs=300,
-    positive_factor=1/3,
+    epochs=200,
+    positive_factor=1,
     depth=4,
     seed=10598,
     reg=0.,
@@ -99,12 +99,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Choose parameter and experiment')
     parser.add_argument('--method', dest='method', type=str, default='qrac')
-    parser.add_argument('--epochs', dest='epochs', type=int, default=300)
+    parser.add_argument('--epochs', dest='epochs', type=int, default=200)
     parser.add_argument('--seed', dest='seed', type=int, default=10598)
     parser.add_argument('--reg', dest='reg', type=float, default=0.)
     parser.add_argument('--depth', dest='depth', type=int, default=4)
     parser.add_argument('--positive_factor',
-                        dest='positive_factor', type=float, default=1/3)
+                        dest='positive_factor', type=float, default=1)
     parser.add_argument('--model_directory',
                         dest='model_directory', type=str, default=None)
     parser.add_argument('--result_directory',
