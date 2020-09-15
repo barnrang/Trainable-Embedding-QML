@@ -168,7 +168,7 @@ def create_quantum_model(METHOD, num_qubit, LAYER):
     return circuit, cirq.Z(readout)
 
 def create_normal_model(METHOD, num_qubit, LAYER):
-    model_circuit, model_readout = create_quantum_model(METHOD, num_qubit)
+    model_circuit, model_readout = create_quantum_model(METHOD, num_qubit, LAYER)
     model = tf.keras.Sequential([
         # The input is the data-circuit, encoded as a tf.string
         tf.keras.layers.Input(shape=(), dtype=tf.string),
@@ -180,7 +180,7 @@ def create_normal_model(METHOD, num_qubit, LAYER):
     return model
 
 def create_TE_model(METHOD, num_qubit, LAYER):
-    model_circuit, model_readout = create_quantum_model(METHOD, num_qubit)
+    model_circuit, model_readout = create_quantum_model(METHOD, num_qubit, LAYER)
     inp = tf.keras.layers.Input((num_qubit,))
     outputs = []
     for i in range(num_qubit):

@@ -4,7 +4,7 @@ import tensorflow_quantum as tfq
 import tensorflow as tf
 import argparse
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 
 THRESHOLD = 0.5
@@ -12,7 +12,8 @@ THRESHOLD = 0.5
 
 def run_exp(
     method='qrac',
-    epoch=200,
+    batch=32,
+    epochs=10,
     depth=4,
     seed=111,
     result_filename=None
@@ -21,7 +22,7 @@ def run_exp(
     tf.random.set_seed(seed)
 
     if result_filename is None:
-        result_filename = f"results/{method}_{epoch}_{depth}_{seed}_history.pk"
+        result_filename = f"results/{method}_{epochs}_{depth}_{seed}_history.pk"
 
     circuit_converters = {
         'qrac': qrac,
@@ -115,11 +116,13 @@ def run_exp(
         optimizer=tf.keras.optimizers.Adam(),
         metrics=['acc'])
 
+    print(epochs)
+
     # Train model
     qnn_history = model.fit(
         x_train_tfcirc, y_train_nocon,
         batch_size=32,
-        epoch=epoch,
+        epochs=epochs,
         verbose=1,
         validation_data=(x_test_tfcirc, y_test),
         callbacks=cb)
@@ -134,7 +137,7 @@ def run_exp(
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Choose method')
-    parser.add_argument('--epoch', dest='epoch', type=int, default=10)
+    parser.add_argument('--epochs', dest='epochs', type=int, default=10)
     parser.add_argument('--batch', dest='batch', type=int, default=32)
     parser.add_argument('--depth', dest='depth', type=int, default=1)
     parser.add_argument('--method', dest='method', type=str, default='16px')
