@@ -101,8 +101,7 @@ def run_exp(
 
         X1 = Parameter('x[2]')
         X2 = Parameter('x[3]')
-        feature_map_con = ZZFeatureMap(
-            feature_dimension=2, reps=2, entanglement='linear')
+        feature_map_con = ZZFeatureMap(2)
         feature_map_con = feature_map_con.assign_parameters([X1, X2])
 
         feature_map = feature_map_con.combine(feature_map_cat)
@@ -119,8 +118,7 @@ def run_exp(
 
         X1 = Parameter('x[0]')
         X2 = Parameter('x[1]')
-        feature_map_con = ZZFeatureMap(
-            feature_dimension=2, reps=2, entanglement='linear')
+        feature_map_con = ZZFeatureMap(2)
         feature_map_con = feature_map_con.assign_parameters([X1, X2])
 
         qr = QuantumRegister(1, 'cat')
