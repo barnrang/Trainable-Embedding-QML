@@ -5,15 +5,15 @@ from utils.TEvqc import MyVQC
 from utils.bc_utils_ver2 import kfold_vqc, binary_encoder, U3gate_input_encoder
 from utils.quantum_utils import select_features, CustomFeatureMap
 from utils.data_provider import load_titanic_pd
-import argparse
 
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
+import argparse
+import numpy as np, matplotlib.pyplot as plt, pandas as pd
+from sklearn.metrics import f1_score
+
 from qiskit.aqua.components.optimizers import optimizer
 from qiskit.aqua.components.variational_forms.ryrz import RYRZ
 from qiskit.circuit.quantumcircuit import QuantumCircuit
-from sklearn.metrics import f1_score
+
 
 from qiskit.circuit import Parameter, QuantumRegister
 from qiskit.providers.aer import QasmSimulator
@@ -38,14 +38,14 @@ def run_exp(
     result_directory=None
 ):
     assert method in ['qrac', 'qrac_zz', 'te', 'te_zz',
-                      'ordinal', 'ordinal_zz'], f"method {method} not exist"
+                      'zz_dis', 'zz_dis_cont'], f"method {method} not exist"
 
     if model_directory is None:
         model_directory = f'models/Titanic_{method}_{epochs}_{positive_factor}_{depth}_{seed}_{reg}_model'
     if result_directory is None:
         result_directory = f'results/Titanic_{method}_{epochs}_{positive_factor}_{depth}_{seed}_{reg}_result'
 
-    all_discrete = method in ['qrac', 'te', 'ordinal']
+    all_discrete = method in ['qrac', 'te', 'zz_dis']
 
     df_train, _, y_train, _ = load_titanic_pd(
         'data/Titanic_train.csv', 'data/Titanic_test.csv', as_category=all_discrete)
@@ -57,13 +57,13 @@ def run_exp(
     feature_map = None
     var_form = None
     X_train = None
-    if method in ['ordinal']:
+    if method in ['zz_dis']:
         X_train = df_train.values
         feature_map = ZZFeatureMap(4)
         var_form = RYRZ(4, depth=depth)
         vqc_gen = VQC
 
-    if method in ['ordinal_zz']:
+    if method in ['zz_dis_cont']:
         df_train['Fare'] = np.log(df_train['Fare'] + 1)
         df_train['Age'] = df_train['Age'] / 60
         X_train = df_train.values

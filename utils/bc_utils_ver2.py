@@ -23,7 +23,7 @@ from sklearn.metrics import f1_score
 # Data preprocessing
 def get_breast_cancer_data():
     # Read the data
-    df = pd.read_csv('breast-cancer.data', \
+    df = pd.read_csv('data/breast-cancer.data', \
                      header=None, \
                      names=['target', \
                             'age', \
