@@ -1,8 +1,15 @@
+zzmap_bc:
+    epochs: 200
+    positive_factor: 1
+    depth: 1
+    seed: 10598
+
 qrac_bc:
     epochs: 200
     positive_factor: 1
     depth: 1
     seed: 10598
+
 te_bc:
     epochs: 200
     positive_factor: 1
@@ -15,6 +22,12 @@ te_reg_bc:
     depth: 1
     seed: 666
     reg: 0.02
+
+zzmap_ts:
+    epochs: 300
+    positive_factor: 0.33
+    depth: 4
+    seed: 10598
 
 qrac_ts:
     epochs: 300
