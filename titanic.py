@@ -1,16 +1,13 @@
-from utils.var_utils_ZZ import MyRYRZ as MyRYRZ_zz
-from utils.var_utils import MyRYRZ
-from utils.TEvqc_ZZ import MyVQC as MyVQC_zz
-from utils.TEvqc import MyVQC
-from utils.bc_utils_ver2 import kfold_vqc, binary_encoder, U3gate_input_encoder
-from utils.quantum_utils import select_features, CustomFeatureMap
 from utils.data_provider import load_titanic_pd
+from utils.quantum_utils import select_features, CustomFeatureMap
+from utils.bc_utils_ver2 import kfold_vqc, binary_encoder, U3gate_input_encoder
+from utils.TEvqc import MyVQC
+from utils.TEvqc_ZZ import MyVQC as MyVQC_zz
+from utils.var_utils import MyRYRZ
+from utils.var_utils_ZZ import MyRYRZ as MyRYRZ_zz
 import argparse
 
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from qiskit.aqua.components.optimizers import optimizer
 from qiskit.aqua.components.variational_forms.ryrz import RYRZ
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from sklearn.metrics import f1_score
@@ -18,9 +15,7 @@ from sklearn.metrics import f1_score
 from qiskit.circuit import Parameter, QuantumRegister
 from qiskit.providers.aer import QasmSimulator
 from qiskit.circuit.library import ZZFeatureMap
-from qiskit.aqua.utils import split_dataset_to_data_and_labels, map_label_to_class_name
 from qiskit.aqua.algorithms import VQC
-from qiskit.aqua.components import variational_forms
 from qiskit.aqua.components.optimizers import SPSA
 import logging
 from qiskit.aqua import set_qiskit_aqua_logging
