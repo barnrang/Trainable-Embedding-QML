@@ -133,7 +133,7 @@ def train_vqc(feature_map, \
     # Callback function for collecting models' parameters and losses along the way
     training_loss_list, training_acc_list, training_f1_list = [], [], []
     validation_loss_list, validation_acc_list, validation_f1_list = [], [], []
-    def callback_collector(step, model_params, loss, _):
+    def callback_collector(step, model_params, loss, _, *args):
         # Save the temp model
         temp_model_filename = os.path.join(model_directory, f'step{step+1}.npz')
         np.savez(temp_model_filename, opt_params = model_params)
@@ -145,8 +145,9 @@ def train_vqc(feature_map, \
             vqc_val = vqc_gen(optimizer, feature_map, var_form, training_input, test_input, quantum_instance=quantum_instance)
         vqc_val.load_model(temp_model_filename)
         # Collect training loss and accuracy
-        training_loss_list.append(loss)
-        y_train_pred = vqc_val.predict(X_train)[1]
+        y_train_prob, y_train_pred = vqc_val.predict(X_train)
+        train_loss = -np.mean(y_train*np.log(y_train_prob[:,1]) + (1 - y_train)*np.log(y_train_prob[:,0]))
+        training_loss_list.append(train_loss)
         training_acc_list.append(np.mean(y_train_pred==y_train))
         training_f1_list.append(f1_score(y_train, y_train_pred))
         # Collect validation loss and accuracy

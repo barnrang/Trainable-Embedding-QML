@@ -2,8 +2,8 @@ from utils.var_utils_ZZ import MyRYRZ as MyRYRZ_zz
 from utils.var_utils import MyRYRZ
 from utils.TEvqc_ZZ import MyVQC as MyVQC_zz
 from utils.TEvqc import MyVQC
-from utils.bc_utils_ver2 import kfold_vqc, binary_encoder
-from utils.quantum_utils import select_features, encoder_3bits_1qubit, CustomFeatureMap
+from utils.bc_utils_ver2 import kfold_vqc, binary_encoder, U3gate_input_encoder
+from utils.quantum_utils import select_features, CustomFeatureMap
 from utils.data_provider import load_titanic_pd
 import argparse
 
@@ -41,9 +41,9 @@ def run_exp(
                       'ordinal', 'ordinal_zz'], f"method {method} not exist"
 
     if model_directory is None:
-        model_directory = f'Titanic_{method}_{epochs}_{positive_factor}_{depth}_{seed}_{reg}_model'
+        model_directory = f'models/Titanic_{method}_{epochs}_{positive_factor}_{depth}_{seed}_{reg}_model'
     if result_directory is None:
-        result_directory = f'Titanic_{method}_{epochs}_{positive_factor}_{depth}_{seed}_{reg}_result'
+        result_directory = f'results/Titanic_{method}_{epochs}_{positive_factor}_{depth}_{seed}_{reg}_result'
 
     all_discrete = method in ['qrac', 'te', 'ordinal']
 
@@ -72,8 +72,9 @@ def run_exp(
         vqc_gen = VQC
 
     if method in ['qrac', 'te']:
-        X_train = binary_encoder(df_train)
-        num_qubit = X_train[0].shape // 3
+        X_train = binary_encoder(df_train.values)
+        print(X_train)
+        num_qubit = len(X_train[0]) // 3
         if method == 'qrac':
             feature_map = CustomFeatureMap('ALL3in1', 1, num_qubit)
             var_form = RYRZ(num_qubit, depth=depth)
@@ -86,7 +87,7 @@ def run_exp(
     if method in ['qrac_zz']:
         df_train['Fare'] = np.log(df_train['Fare'] + 1)
         df_train['Age'] = df_train['Age'] / 60
-        X_train_num = encoder_3bits_1qubit(df_train[['Sex', 'Pclass']])
+        X_train_num = U3gate_input_encoder(df_train[['Sex', 'Pclass']].values)
         X_train_con = df_train[['Age', 'Fare']].values
         X_train = np.concatenate([X_train_con, X_train_num], axis=1)
 
@@ -111,7 +112,7 @@ def run_exp(
     if method in ['te_zz']:
         df_train['Fare'] = np.log(df_train['Fare'] + 1)
         df_train['Age'] = df_train['Age'] / 60
-        X_train_num = binary_encoder(df_train[['Sex', 'Pclass']])
+        X_train_num = binary_encoder(df_train[['Sex', 'Pclass']].values)
         X_train_con = df_train[['Age', 'Fare']].values
 
         X_train = np.concatenate([X_train_num, X_train_con], axis=1)
@@ -133,7 +134,7 @@ def run_exp(
     assert var_form is not None, "Varform is none"
 
     backend = QasmSimulator({"method": "statevector_gpu"})
-    def optimizer_gen(): return SPSA(300)
+    def optimizer_gen(): return SPSA(epochs)
 
     result = kfold_vqc(feature_map,
                        var_form,
