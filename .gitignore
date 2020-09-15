@@ -353,3 +353,6 @@ MigrationBackup/
 # Model and Result
 models/
 results/
+
+# PyCharm IDE
+.idea/
