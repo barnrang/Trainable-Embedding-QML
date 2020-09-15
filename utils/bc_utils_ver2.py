@@ -42,13 +42,25 @@ def get_breast_cancer_data():
     return df.drop(['target'], axis=1), df.target
 
 # K-fold Random Forest Classification
-def kfold_randomforest(X, y, k=5):
+def kfold_randomforest(X, y, k=4, seed=123123, positivedata_duplicate_ratio=0):
     print('='*50)
     print(f'{k}-fold Random Forest Classification')
     acc_list, f1_list, feature_importances_list = [], [], []
+    np.random.seed(seed)
     for train_id, test_id in KFold(n_splits=k, shuffle=True).split(X):
         # Split the data
         X_train, X_test, y_train, y_test = X[train_id], X[test_id], y[train_id], y[test_id]
+        if positivedata_duplicate_ratio:
+            X_duplicate_shape = tuple([0] + list(X_train.shape)[1:])
+            X_duplicate = np.empty(X_duplicate_shape)
+            if positivedata_duplicate_ratio > 0:
+                for i in range(int(positivedata_duplicate_ratio)):
+                    X_duplicate = np.concatenate((X_duplicate, X_train[y_train==1]), axis=0)
+                X_duplicate = np.concatenate((X_duplicate, X_train[y_train == 1][:int((positivedata_duplicate_ratio - int(positivedata_duplicate_ratio))*X_train[y_train==1].shape[0])]), axis=0)
+                X_train = np.concatenate((X_train, X_duplicate), axis=0)
+                y_train = np.concatenate((y_train, np.ones(len(X_duplicate))))
+            else:
+                raise ValueError('Please enter nonnegative real number')
         # Train the model
         rf_classifier = RandomForestClassifier()
         rf_classifier.fit(X_train, y_train)
@@ -63,6 +75,22 @@ def kfold_randomforest(X, y, k=5):
     print('='*50)
 
     return acc_list, f1_list, feature_importances_list
+
+def randomforest_featureselection(X_df, y_df, k=4, selected_features_num=4, seed=123123, positivedata_duplicate_ratio=0):
+    X, y = X_df.values, y_df.values
+    acc_list, f1_list, feature_importances_list = kfold_randomforest(X, y, k, seed, positivedata_duplicate_ratio)
+
+    # Feature selection from feature importances
+    selected_features = X_df.columns[sorted(range(X.shape[1]), key=lambda i: np.mean(feature_importances_list, axis=0)[i])[:-selected_features_num-1:-1]]
+    print('The four most important features are', ", ".join(selected_features[:-1]).upper() + f' and {selected_features[-1].upper()} respectively.')
+
+    # Visualize the feature importances
+    plt.figure(figsize=(10,8))
+    plt.bar(X_df.columns, np.mean(feature_importances_list, axis=0))
+    plt.title('Feature Importances')
+    plt.show()
+
+    return acc_list, f1_list, selected_features
 
 # Dictionary to feed VQC
 def get_input_dict_for_VQC(X_train, X_test, y_train, y_test, positivedata_duplicate_ratio):
