@@ -24,7 +24,7 @@ def run_exp(
     if result_filename is None:
         result_filename = f"results/{method}_{epochs}_{depth}_{seed}_history.pk"
 
-    circuit_converters = {
+    input_converters = {
         'qrac': qrac,
         'conv': conv,
         'te': TE_31,
@@ -65,10 +65,10 @@ def run_exp(
     if method not in ['8px', '16px']:
         data_train, data_test = [], []
         for row in x_train_bin:
-            data_train.append(circuit_converters[method](row))
+            data_train.append(input_converters[method](row))
 
         for row in x_test_bin:
-            data_test.append(circuit_converters[method](row))
+            data_test.append(input_converters[method](row))
 
         data_train = np.array(data_train)
         data_test = np.array(data_test)
