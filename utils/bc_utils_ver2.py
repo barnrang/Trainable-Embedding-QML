@@ -162,6 +162,7 @@ def train_vqc(feature_map, \
         vqc = VQC(optimizer, feature_map, var_form, training_input, test_input, callback=callback_collector, quantum_instance=quantum_instance)
     else:
         vqc = vqc_gen(optimizer, feature_map, var_form, training_input, test_input, callback=callback_collector, quantum_instance=quantum_instance)
+    vqc.random.seed(seed)
     result = vqc.run()
     clear_output()
 
