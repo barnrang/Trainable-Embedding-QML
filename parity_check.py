@@ -20,6 +20,7 @@ set_qiskit_aqua_logging(logging.DEBUG)  # choose INFO, DEBUG to see the log
 
 def run_exp(
     method='naive',
+    epochs=200,
     bit=3,
     dup=1,
     reg=0.,
@@ -82,10 +83,10 @@ def run_exp(
     }
 
     if method == 'te':
-        qsvm = MyVQC(SPSA(200), feature_map, var_form, training_input,
+        qsvm = MyVQC(SPSA(epochs), feature_map, var_form, training_input,
                    callback=loss_history_callback, lamb=reg)
     else:
-        qsvm = VQC(SPSA(200), feature_map, var_form,
+        qsvm = VQC(SPSA(epochs), feature_map, var_form,
                    training_input, callback=loss_history_callback)
 
     qsvm.random.seed(seed)
@@ -121,13 +122,14 @@ def run_exp(
     print(f"Classified: {acc*100}%")
     print("=" * 97)
 
-    return result
+    return {'train_acc': acc}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Choose METHOD')
     parser.add_argument('--method', dest='method',
                         type=str, default='qrac')
+    parser.add_argument('--epochs', dest="epochs", type=int, default=200)
     parser.add_argument('--dup', dest='dup', type=int, default=1)
     parser.add_argument('--bit', dest='bit', type=int, default=3)
     parser.add_argument('--seed', dest='seed', type=int, default=111)

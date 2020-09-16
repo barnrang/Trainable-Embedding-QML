@@ -145,7 +145,14 @@ def run_exp(
                        positivedata_duplicate_ratio=positive_factor,
                        vqc_gen=vqc_gen)
 
-    return result
+    return_result = {
+        'train_acc': result['Training accuracies (mean)'][-1],
+        'train_f1': result['Training F1 scores (mean)'][-1],
+        'test_acc': result['Test accuracies (mean)'][-1],
+        'test_f1': result['Test F1 scores (mean)'][-1]
+    }
+
+    return return_result
     # pass
 
 

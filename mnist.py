@@ -14,7 +14,7 @@ def run_exp(
     method='qrac',
     batch=32,
     epochs=10,
-    depth=4,
+    depth=1,
     seed=111,
     result_filename=None
 ):
@@ -132,7 +132,12 @@ def run_exp(
     with open(result_filename, 'wb') as f:
         pickle.dump(qnn_history.history, f)
 
-    return qnn_history, qnn_results
+    return_result = {
+        'train_acc': qnn_history['acc'][-1],
+        'test_acc': qnn_history['val_acc'][-1]
+    }
+
+    return return_result
 
 
 if __name__ == '__main__':
@@ -145,4 +150,5 @@ if __name__ == '__main__':
     parser.add_argument('--result_filename',
                         dest='result_filename', type=str, default=None)
     args = parser.parse_args()
-    qnn_history, qnn_results = run_exp(**vars(args))
+    qnn_results = run_exp(**vars(args))
+    print(qnn_results)
