@@ -1,51 +1,161 @@
-zzmap_bc:
-    epochs: 200
-    positive_factor: 1
-    depth: 1
-    seed: 10598
+# Breast cancer
 
-qrac_bc:
-    epochs: 200
-    positive_factor: 1
-    depth: 1
-    seed: 10598
+bc:
 
-te_bc:
-    epochs: 200
-    positive_factor: 1
-    depth: 1
-    seed: 700
+    zzmap_bc:
+        method: "zz_dis"
+        epochs: 200
+        positive_factor: 1
+        depth: 1
+        seed: 10598
 
-te_reg_bc:
-    epochs: 200
-    positive_factor: 1
-    depth: 1
-    seed: 666
-    reg: 0.02
+    qrac_bc:
+        method: "qrac"
+        epochs: 200
+        positive_factor: 1
+        depth: 1
+        seed: 10598
 
-zzmap_ts:
-    epochs: 300
-    positive_factor: 0.33
-    depth: 4
-    seed: 10598
+    te_bc:
+        method: "te"
+        epochs: 200
+        positive_factor: 1
+        depth: 1
+        seed: 700
 
-qrac_ts:
-    epochs: 300
-    positive_factor: 0.33
-    depth: 4
-    seed: 10598
+    te_reg_bc:
+        method: "te"
+        epochs: 200
+        positive_factor: 1
+        depth: 1
+        seed: 666
+        reg: 0.02
 
-te_reg_ts:
-    epochs: 300
-    positive_factor: 0.33
-    depth: 4
-    seed: 10598
+# Titanic
 
-te_reg_ts:
-    epochs: 300
-    positive_factor: 0.33
-    depth: 4
-    seed: 666
-    reg: 0.02
+ts:
 
+    zzmap_dis_ts:
+        method: "zz_dis"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 10598
 
+    zzmap_dis_cont_ts:
+        method: "zz_dis_cont"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 10598
+
+    qrac_ts:
+        method: "qrac"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 10598
+
+    qrac_zz_ts:
+        method: "qrac_zz"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 10598
+
+    te_ts:
+        method: "te"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 10598
+
+    te_reg_ts:
+        method: "te"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 666
+        reg: 0.02
+
+    te_zz_ts:
+        method: "te_zz"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 666
+
+    te_zz_reg_ts:
+        method: "te_zz"
+        epochs: 300
+        positive_factor: 0.33
+        depth: 4
+        seed: 666
+        reg: 0.02
+
+# MNIST
+mnist:
+    16px_mnist:
+        method: "16px"
+        epochs: 10
+        depth: 1
+        seed: [111,222,333,444,555]
+
+    8px_mnist:
+        method: "8px"
+        epochs: 10
+        depth: 1
+        seed: [111,222,333,444,555]
+
+    qrac_mnist:
+        method: "qrac"
+        epochs: 10
+        depth: 1
+        seed: [111,222,333,444,555]
+
+    conv_mnist:
+        method: "conv"
+        epochs: 10
+        depth: 1
+        seed: [111,222,333,444,555]
+
+    conv_te_mnist:
+        method: "conv_te"
+        epochs: 10
+        depth: 1
+        seed: [111,222,333,444,555]
+
+    conv_41_mnist:
+        method: "conv_41"
+        epochs: 10
+        depth: 1
+        seed: [111,222,333,444,555]
+
+# Parity check
+pc:
+    naive_pc:
+        method: "naive"
+        epochs: 200
+        depth: 4
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_pc:
+        method: "qrac"
+        epochs: 200
+        depth: 4
+        dup: 1
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_dup2_pc:
+        method: "qrac"
+        epochs: 200
+        depth: 4
+        dup: 2
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_dup3_pc:
+        method: "qrac"
+        epochs: 200
+        depth: 4
+        dup: 3
+        seed: [111,222,333,444,555,666,777,888,999,1111]
