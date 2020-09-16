@@ -48,12 +48,15 @@ def run_single_exp(exp_configs, exp_name, sub_exp_name):
 with open('configs/experiment_config.yaml') as file:
     exp_configs = yaml.safe_load(file)
 
+print(exp_configs)
+
 # Run all experiments for a dataset
 if sub_exp_name is None:
     results = {}
     exp_dataset = exp_configs[exp_name]
+    print(exp_dataset)
     for sub_exp in exp_dataset:
-        results[sub_exp] = run_single_exp(exp_configs, exp_name, sub_exp_name)
+        results[sub_exp] = run_single_exp(exp_configs, exp_name, sub_exp)
 else:
     results = run_single_exp(exp_configs, exp_name, sub_exp_name)
 

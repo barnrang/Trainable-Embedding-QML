@@ -3,7 +3,7 @@
 bc:
 
     zzmap_bc:
-        method: "zz_dis"
+        method: "zz"
         epochs: 200
         positive_factor: 1
         depth: 1

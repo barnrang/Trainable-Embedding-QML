@@ -104,6 +104,15 @@ def run_exp(
     # F1 score
     acc = np.mean(y_pred_train == y_train)
     import pickle
+    try:
+        os.mkdir('models/')
+    except:
+        pass
+
+    try:
+        os.mkdir('results/')
+    except:
+        pass
 
     if reg == 0.:
         qsvm.save_model(
@@ -129,7 +138,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Choose METHOD')
     parser.add_argument('--method', dest='method',
                         type=str, default='qrac')
-    parser.add_argument('--epochs', dest="epochs", type=int, default=200)
+    parser.add_argument('--epochs', dest="epochs", type=int, default=1)
     parser.add_argument('--dup', dest='dup', type=int, default=1)
     parser.add_argument('--bit', dest='bit', type=int, default=3)
     parser.add_argument('--seed', dest='seed', type=int, default=111)
