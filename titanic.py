@@ -114,7 +114,7 @@ def run_exp(
         X_train_num = binary_encoder(df_train[['Sex', 'Pclass']].values)
         X_train_con = df_train[['Age', 'Fare']].values
 
-        X_train = np.concatenate([X_train_num, X_train_con], axis=1)
+        X_train = np.array([[x,y] for x,y in zip(X_train_num, X_train_con)])
 
         X1 = Parameter('x[0]')
         X2 = Parameter('x[1]')
@@ -125,7 +125,7 @@ def run_exp(
         feature_map_num = QuantumCircuit(qr)
 
         feature_map = feature_map_num.combine(feature_map_con)
-        var_form = MyRYRZ_zz(2, 1, depth=depth)
+        var_form = MyRYRZ_zz(1, 2, depth=depth)
         vqc_gen = MyVQC_zz
 
     assert feature_map is not None, "Feature map is none"
