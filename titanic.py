@@ -7,7 +7,9 @@ from utils.quantum_utils import select_features, CustomFeatureMap
 from utils.data_provider import load_titanic_pd
 
 import argparse
-import numpy as np, matplotlib.pyplot as plt, pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.metrics import f1_score
 
 from qiskit.aqua.components.optimizers import optimizer
@@ -159,16 +161,19 @@ def run_exp(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Choose parameter and experiment')
-    parser.add_argument('--method', dest='method', type=str, default='qrac')
+    parser.add_argument('--method', dest='method', type=str, default='qrac', help='Please choose the method from the following [' + ', '.join(['qrac', 'qrac_zz', 'te', 'te_zz',
+                                                                                                                                              'zz_dis', 'zz_dis_cont']) + '] (default qrac)')
     parser.add_argument('--epochs', dest='epochs', type=int, default=300)
-    parser.add_argument('--seed', dest='seed', type=int, default=10598)
-    parser.add_argument('--reg', dest='reg', type=float, default=0.)
-    parser.add_argument('--depth', dest='depth', type=int, default=4)
+    parser.add_argument('--seed', dest='seed', type=int,
+                        default=10598, help='set random seed')
+    parser.add_argument('--reg', dest='reg', type=float,
+                        default=0., help='regularized weight (default 0)')
+    parser.add_argument('--depth', dest='depth', type=int, default=4, help="Depth of RYRZ variational form (default 4)")
     parser.add_argument('--positive_factor',
-                        dest='positive_factor', type=float, default=1/3)
+                        dest='positive_factor', type=float, default=1/3, help="Augmented data with positive sample ratio (default 1/3)")
     parser.add_argument('--model_directory',
-                        dest='model_directory', type=str, default=None)
+                        dest='model_directory', type=str, default=None, help='folder to save the models')
     parser.add_argument('--result_directory',
-                        dest='result_directory', type=str, default=None)
+                        dest='result_directory', type=str, default=None, help='folder to save the results')
     args = parser.parse_args()
     result = run_exp(**vars(args))

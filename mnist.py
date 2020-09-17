@@ -142,10 +142,10 @@ def run_exp(
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Choose method')
-    parser.add_argument('--epochs', dest='epochs', type=int, default=10)
-    parser.add_argument('--batch', dest='batch', type=int, default=32)
-    parser.add_argument('--depth', dest='depth', type=int, default=1)
-    parser.add_argument('--method', dest='method', type=str, default='16px')
+    parser.add_argument('--epochs', dest='epochs', type=int, default=10, help="Number of epochs (default 10)")
+    parser.add_argument('--batch', dest='batch', type=int, default=32, help="Batch size (default 32)")
+    parser.add_argument('--depth', dest='depth', type=int, default=1, help="Depth of NN (default 1)")
+    parser.add_argument('--method', dest='method', type=str, default='16px', help="Choose from the following method [16px, 8px, qrac, conv, conv_41] (default 16px)")
     parser.add_argument('--seed', dest='seed', type=int, default=111)
     parser.add_argument('--result_filename',
                         dest='result_filename', type=str, default=None)
