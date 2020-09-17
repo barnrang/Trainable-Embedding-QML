@@ -131,8 +131,8 @@ mnist:
         depth: 1
         seed: [111,222,333,444,555]
 
-# Parity check
-pc:
+# Parity check 3,6,9
+pc_3:
     naive_pc:
         method: "naive"
         epochs: 200
@@ -156,6 +156,70 @@ pc:
     qrac_dup3_pc:
         method: "qrac"
         epochs: 200
+        depth: 4
+        dup: 3
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+pc_6:
+    naive_pc:
+        method: "naive"
+        epochs: 200
+        bit: 6
+        depth: 4
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_pc:
+        method: "qrac"
+        epochs: 200
+        bit: 6
+        depth: 4
+        dup: 1
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_dup2_pc:
+        method: "qrac"
+        epochs: 200
+        bit: 6
+        depth: 4
+        dup: 2
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_dup3_pc:
+        method: "qrac"
+        epochs: 200
+        bit: 6
+        depth: 4
+        dup: 3
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+pc_9:
+    naive_pc:
+        method: "naive"
+        epochs: 200
+        bit: 9
+        depth: 4
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_pc:
+        method: "qrac"
+        epochs: 200
+        bit: 9
+        depth: 4
+        dup: 1
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_dup2_pc:
+        method: "qrac"
+        epochs: 200
+        bit: 9
+        depth: 4
+        dup: 2
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    qrac_dup3_pc:
+        method: "qrac"
+        epochs: 200
+        bit: 9
         depth: 4
         dup: 3
         seed: [111,222,333,444,555,666,777,888,999,1111]
