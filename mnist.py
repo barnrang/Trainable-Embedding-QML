@@ -133,8 +133,8 @@ def run_exp(
         pickle.dump(qnn_history.history, f)
 
     return_result = {
-        'train_acc': qnn_history['acc'][-1],
-        'test_acc': qnn_history['val_acc'][-1]
+        'train_acc': qnn_history.history['acc'][-1],
+        'test_acc': qnn_history.history['val_acc'][-1]
     }
 
     return return_result
