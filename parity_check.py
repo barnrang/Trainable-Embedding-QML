@@ -1,3 +1,4 @@
+from qiskit import IBMQ
 from qiskit.aqua import QuantumInstance
 from qiskit.providers.aer import QasmSimulator
 from qiskit.aqua.components.optimizers import COBYLA, SPSA
@@ -26,6 +27,7 @@ def run_exp(
     reg=0.,
     depth=4,
     seed=111,
+    real_device=False
 ):
     assert bit % 3 == 0, f"number of bit should be x3"
     assert method in ['naive', 'qrac',
@@ -91,8 +93,12 @@ def run_exp(
 
     qsvm.random.seed(seed)
 
-    backend_options = {"method": "statevector_gpu"}
-    backend = QasmSimulator(backend_options)
+    if real_device:
+        # Please fix these line...
+        provider = IBMQ.get_provider()
+        backend = provider.get_backend('ibmq_london')
+    else:
+        backend = QasmSimulator({"method": "statevector_gpu"})
 
     quantum_instance = QuantumInstance(
         backend, shots=1024, seed_simulator=seed, seed_transpiler=seed, optimization_level=3)
@@ -144,5 +150,6 @@ if __name__ == "__main__":
     parser.add_argument('--seed', dest='seed', type=int, default=111)
     parser.add_argument('--reg', dest='reg', type=float, default=0., help="Regularization weight (default 0)")
     parser.add_argument('--depth', dest='depth', type=int, default=4, help="Depth of RYRZ variational form (default 4)")
+    parser.add_argument('--real_device', dest='real_device', action='store_true', default=False)
     args = parser.parse_args()
     run_exp(**vars(args))

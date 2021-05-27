@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import f1_score
 
+from qiskit import IBMQ
 from qiskit.aqua.components.optimizers import optimizer
 from qiskit.aqua.components.variational_forms.ryrz import RYRZ
 from qiskit.circuit.quantumcircuit import QuantumCircuit
@@ -35,7 +36,8 @@ def run_exp(
     seed=10598,
     reg=0.,
     model_directory=None,
-    result_directory=None
+    result_directory=None,
+    real_device=False,
 ):
     assert method in ['qrac', 'qrac_zz', 'te', 'te_zz',
                       'zz_dis', 'zz_dis_cont'], f"method {method} not exist"
@@ -113,8 +115,11 @@ def run_exp(
         df_train['Age'] = df_train['Age'] / 60
         X_train_num = binary_encoder(df_train[['Sex', 'Pclass']].values)
         X_train_con = df_train[['Age', 'Fare']].values
+        print(X_train_num[:,None])
+        print(X_train_con)
 
-        X_train = np.concatenate([X_train_num, X_train_con], axis=1)
+        X_train = np.array([[x,y] for x,y in zip(X_train_num, X_train_con)])
+        #X_train = np.concatenate([X_train_num[:,None], X_train_con], axis=1)
 
         X1 = Parameter('x[0]')
         X2 = Parameter('x[1]')
@@ -125,13 +130,18 @@ def run_exp(
         feature_map_num = QuantumCircuit(qr)
 
         feature_map = feature_map_num.combine(feature_map_con)
-        var_form = MyRYRZ_zz(2, 1, depth=depth)
+        var_form = MyRYRZ_zz(1, 2, depth=depth)
         vqc_gen = MyVQC_zz
 
     assert feature_map is not None, "Feature map is none"
     assert var_form is not None, "Varform is none"
 
-    backend = QasmSimulator({"method": "statevector_gpu"})
+    if real_device:
+        # Please fix these line...
+        provider = IBMQ.get_provider()
+        backend = provider.get_backend('ibmq_london')
+    else:
+        backend = QasmSimulator({"method": "statevector_gpu"})
     def optimizer_gen(): return SPSA(epochs)
 
     result = kfold_vqc(feature_map,
@@ -175,5 +185,6 @@ if __name__ == "__main__":
                         dest='model_directory', type=str, default=None, help='folder to save the models')
     parser.add_argument('--result_directory',
                         dest='result_directory', type=str, default=None, help='folder to save the results')
+    parser.add_argument('--real_device', dest='real_device', action='store_true', default=False)
     args = parser.parse_args()
     result = run_exp(**vars(args))
