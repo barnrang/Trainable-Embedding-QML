@@ -119,7 +119,6 @@ def run_exp(
         print(X_train_con)
 
         X_train = np.array([[x,y] for x,y in zip(X_train_num, X_train_con)])
-        #X_train = np.concatenate([X_train_num[:,None], X_train_con], axis=1)
 
         X1 = Parameter('x[0]')
         X2 = Parameter('x[1]')
