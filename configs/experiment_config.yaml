@@ -70,6 +70,14 @@ ts:
         depth: 4
         seed: 10598
 
+    te_reg_ts_100:
+        method: "te"
+        epochs: 100
+        positive_factor: 0.33
+        depth: 4
+        seed: 666
+        reg: 0.02
+
     te_reg_ts:
         method: "te"
         epochs: 300
@@ -158,4 +166,27 @@ pc:
         epochs: 200
         depth: 4
         dup: 3
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    te_pc:
+        method: "te"
+        epochs: 400
+        depth: 4
+        dup: 1
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    te_dup2_pc:
+        method: "te"
+        epochs: 400
+        depth: 4
+        dup: 1
+        bit: 2
+        seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    te_dup3_pc:
+        method: "te"
+        epochs: 400
+        depth: 4
+        dup: 1
+        bit: 3
         seed: [111,222,333,444,555,666,777,888,999,1111]
