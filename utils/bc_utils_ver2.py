@@ -108,6 +108,17 @@ def get_input_dict_for_VQC(X_train, X_test, y_train, y_test, positivedata_duplic
                    1: X_test[y_test == 1] }
     return training_input, test_input
 
+def get_save_model_callback(model_directory):
+    def callback_collector(step, model_params, loss, _, *args):
+        # Save the temp model
+        temp_model_filename = os.path.join(model_directory, f'step{step}.npz')
+        np.savez(temp_model_filename, opt_params = model_params)
+        
+        if step % 20 != 0:
+            return
+
+    return callback_collector
+
 # Train VQC
 def train_vqc(feature_map, \
               var_form, \
@@ -116,7 +127,7 @@ def train_vqc(feature_map, \
               seed, \
               X_train, X_test, y_train, y_test, \
               model_directory, \
-              result_filename, \
+              result_directory, \
               positivedata_duplicate_ratio=1, \
               shots=1024,
               vqc_gen=None):
@@ -128,15 +139,21 @@ def train_vqc(feature_map, \
     quantum_instance = QuantumInstance(backend, shots=shots, seed_simulator=seed, seed_transpiler=seed,optimization_level=3)
     print('='*100 + f'\nWorking directory: {os.getcwd()}\n' + '='*100)
     if not os.path.isdir(model_directory):
-        os.makedirs(model_directory)  
+        os.makedirs(model_directory) 
+    if not os.path.isdir(result_directory):
+        os.makedirs(result_directory)  
 
     # Callback function for collecting models' parameters and losses along the way
     training_loss_list, training_acc_list, training_f1_list = [], [], []
     validation_loss_list, validation_acc_list, validation_f1_list = [], [], []
     def callback_collector(step, model_params, loss, _, *args):
         # Save the temp model
-        temp_model_filename = os.path.join(model_directory, f'step{step+1}.npz')
+        temp_model_filename = os.path.join(model_directory, f'step{step}.npz')
         np.savez(temp_model_filename, opt_params = model_params)
+        
+        if step % 20 != 0:
+            return
+        
         # Load the temp model
         # vqc_val = VQC(optimizer, feature_map, var_form, training_input, test_input, quantum_instance=quantum_instance)
         if vqc_gen is None:
@@ -157,6 +174,20 @@ def train_vqc(feature_map, \
         validation_acc_list.append(np.mean(y_test_pred==y_test))
         validation_f1_list.append(f1_score(y_test, y_test_pred))
 
+        mid_result = {
+            'Training losses': train_loss,
+            'Training accuracies': np.mean(y_train_pred==y_train),
+            'Training F1 scores': f1_score(y_train, y_train_pred),
+            'Validation losses': val_loss,
+            'Test accuracies': np.mean(y_test_pred==y_test),
+            'Test F1 scores': f1_score(y_test, y_test_pred),
+        }
+
+        with open(os.path.join(result_directory, f'step_{step}'), 'wb') as f:
+            pickle.dump(mid_result, f)
+
+
+
     # Run VQC
     if vqc_gen is None:
         vqc = VQC(optimizer, feature_map, var_form, training_input, test_input, callback=callback_collector, quantum_instance=quantum_instance)
@@ -170,10 +201,10 @@ def train_vqc(feature_map, \
     result['Training losses'], result['Validation losses'] = np.array(training_loss_list), np.array(validation_loss_list)
     result['Training F1 scores'], result['Training accuracies'] = np.array(training_f1_list), np.array(training_acc_list)
     result['Test F1 scores'], result['Test accuracies'] = np.array(validation_f1_list), np.array(validation_acc_list)
-    if os.path.dirname(result_filename):
-        if not os.path.isdir(os.path.dirname(result_filename)):
-            os.makedirs(os.path.dirname(result_filename))
-    with open(result_filename, 'wb') as f:
+    if os.path.dirname(result_directory):
+        if not os.path.isdir(os.path.dirname(result_directory)):
+            os.makedirs(os.path.dirname(result_directory))
+    with open(result_directory + '.pkl', 'wb') as f:
         pickle.dump(result, f)
     
     # Report final results
@@ -181,7 +212,7 @@ def train_vqc(feature_map, \
     print(f'Final accuracy (test set): {validation_acc_list[-1]:.2%} | Final accuracy (training set): {training_acc_list[-1]:.2%}')
     print(f'Final F1 score (test set): {validation_f1_list[-1]:.2%} | Final F1 score (training set): {training_f1_list[-1]:.2%}')
     print(f'All models are saved at {os.path.join(os.getcwd(), model_directory)}.')
-    print(f'Result is saved at {os.path.join(os.getcwd(), result_filename)}.')
+    print(f'Result is saved at {os.path.join(os.getcwd(), result_directory)}.')
 
     return result
 
@@ -220,7 +251,7 @@ def kfold_vqc(feature_map, \
         X_train, X_test, y_train, y_test = X[train_id], X[test_id], y[train_id], y[test_id]
         # Train a model
         model_directory_fold = os.path.join(model_directory, f'foldnumber{fold}') 
-        result_filename_fold = os.path.join(result_directory, f'foldnumber{fold}.pkl')
+        result_filename_fold = os.path.join(result_directory, f'foldnumber{fold}')
         optimizer = optimizer_generator()
         result_onefold = train_vqc(feature_map, \
                                 var_form, \

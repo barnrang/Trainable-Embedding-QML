@@ -70,9 +70,9 @@ ts:
         depth: 4
         seed: 10598
 
-    te_reg_ts_100:
+    te_reg_ts_20:
         method: "te"
-        epochs: 100
+        epochs: 20
         positive_factor: 0.33
         depth: 4
         seed: 666
@@ -175,6 +175,23 @@ pc_6:
         bit: 6
         depth: 4
         seed: [111,222,333,444,555,666,777,888,999,1111]
+
+    te_pc_real_device:
+        method: "te"
+        epochs: 400
+        bit: 6
+        depth: 4
+        dup: 1
+        seed: [111]
+        real_device: True
+
+    te_pc:
+        method: "te"
+        epochs: 400
+        bit: 6
+        depth: 4
+        dup: 1
+        seed: [111,222,333,444,555]
 
     qrac_pc:
         method: "qrac"
