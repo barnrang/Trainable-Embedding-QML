@@ -18,7 +18,9 @@ sub_exp_name = args.sub_exp_name
 run_exp_dataset = {
     'bc': bc_run_exp,
     'ts': ts_run_exp,
-    'pc': pc_run_exp,
+    'pc_3': pc_run_exp,
+    'pc_6': pc_run_exp,
+    'pc_9': pc_run_exp,
     'mnist': mnist_run_exp
 }
 
