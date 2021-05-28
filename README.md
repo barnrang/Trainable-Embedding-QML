@@ -45,10 +45,13 @@ The parameter for each experiment can be listed using `--help`.
 ```
 run_exp.py --exp_name pc_6 --sub_exp_name te_pc_real_device
 ```
+Please update detail at this [line](https://github.com/barnrang/Trainable-Embedding-QML/blob/7ab2f9c6f0d39daecf4237c077fd9c3c451833cc/parity_check.py#L110)
+
 
 100 epochs Titanic Survival
 ```
 run_exp.py --exp_name ts --sub_exp_name te_reg_ts_real
 ```
+Please update detail at this [line](https://github.com/barnrang/Trainable-Embedding-QML/blob/7ab2f9c6f0d39daecf4237c077fd9c3c451833cc/titanic.py#L138)
 
-You can change the parameters in `config/experiment_config.yaml`
+You can change the parameters in `config/experiment_config.yaml`.
