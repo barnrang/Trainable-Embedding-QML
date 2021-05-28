@@ -39,3 +39,16 @@ titanic.py - Titanic Survival
 mnist.py - MNIST handwritten digit
 ```
 The parameter for each experiment can be listed using `--help`. 
+
+# Run onreal device (NEW!)
+6 bits parity check
+```
+run_exp.py --exp_name pc_6 --sub_exp_name te_pc_real_device
+```
+
+100 epochs Titanic Survival
+```
+run_exp.py --exp_name ts --sub_exp_name te_reg_ts_real
+```
+
+You can change the parameters in `config/experiment_config.yaml`

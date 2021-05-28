@@ -78,6 +78,15 @@ ts:
         seed: 666
         reg: 0.02
 
+    te_reg_ts_real:
+        method: "te"
+        epochs: 100
+        positive_factor: 0.33
+        depth: 4
+        seed: 666
+        reg: 0.02
+        real_device: True
+
     te_reg_ts:
         method: "te"
         epochs: 300
