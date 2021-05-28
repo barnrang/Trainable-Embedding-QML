@@ -14,6 +14,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 from utils.var_utils import MyRYRZ
 from utils.TEvqc import MyVQC
 from utils.quantum_utils import CustomFeatureMap
+from utils.bc_utils_ver2 import get_save_model_callback
 
 from qiskit.aqua import set_qiskit_aqua_logging
 import logging
@@ -64,8 +65,12 @@ def run_exp(
 
     vqc_ordinal_log = []
 
-    def loss_history_callback(_, __, loss, ___, *args):
+    def loss_history_callback(step, model_params, loss, _, *args):
         vqc_ordinal_log.append(loss)
+
+        # Save model
+        temp_model_filename = os.path.join(model_directory, f'step{step}.npz')
+        np.savez(temp_model_filename, opt_params = model_params)
 
     if method == 'naive':
         feature_map = CustomFeatureMap('X', 1, num_qubit)
@@ -83,6 +88,14 @@ def run_exp(
         0: x_st[y_train == 0],
         1: x_st[y_train == 1]
     }
+
+    if reg == 0.:
+        model_directory = f'models/Parity_check_{method}_{bit}_{dup}_{seed}_{depth}'
+    else:
+        model_directory = f'models/Parity_check_{method}_{bit}_{dup}_{seed}_{depth}_{reg}'
+
+    if not os.path.isdir(model_directory):
+        os.makedirs(model_directory) 
 
     if method == 'te':
         qsvm = MyVQC(SPSA(epochs), feature_map, var_form, training_input,
@@ -120,14 +133,11 @@ def run_exp(
     except:
         pass
 
+    qsvm.save_model(f'{model_directory}/model')
     if reg == 0.:
-        qsvm.save_model(
-            f'models/Parity_check_{method}_{bit}_{dup}_{seed}_{depth}')
         with open(f'results/Parity_check_{method}_{bit}_{dup}_{seed}_{depth}', 'wb') as f:
             pickle.dump([vqc_ordinal_log, acc], f)
     else:
-        qsvm.save_model(
-            f'models/Parity_check_{method}_{bit}_{dup}_{seed}_{depth}_{reg}')
         with open(f'results/Parity_check_{method}_{bit}_{dup}_{seed}_{depth}_{reg}', 'wb') as f:
             pickle.dump([vqc_ordinal_log, acc], f)
 
