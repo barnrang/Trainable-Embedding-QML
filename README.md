@@ -1,5 +1,5 @@
 # Trainable-Embedding-QML
-Implementation of Quantum Random Access Coding (QRAC) and Trainable Embedding (TE)
+Implementation of Quantum Random Access Coding (QRAC) and Trainable Embedding (TE) based on our preprinted paper [here](https://arxiv.org/abs/2106.09415)
 
 # Run experiment
 To run the experiment provided in the paper, please take a look at `configs/expriment_config.yaml`.
@@ -55,3 +55,14 @@ run_exp.py --exp_name ts --sub_exp_name te_reg_ts_real
 Please update detail at this [line](https://github.com/barnrang/Trainable-Embedding-QML/blob/7ab2f9c6f0d39daecf4237c077fd9c3c451833cc/titanic.py#L138)
 
 You can change the parameters in `config/experiment_config.yaml`.
+
+# Citation
+```
+@article{Thumwanit2021TrainableDF,
+  title={Trainable Discrete Feature Embeddings for Variational Quantum Classifier},
+  author={Napat Thumwanit and Chayaphol Lortararprasert and Hiroshi Yano and Raymond H. Putra},
+  journal={ArXiv},
+  year={2021},
+  volume={abs/2106.09415}
+}
+```
