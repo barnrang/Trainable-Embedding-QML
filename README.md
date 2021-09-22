@@ -40,7 +40,7 @@ mnist.py - MNIST handwritten digit
 ```
 The parameter for each experiment can be listed using `--help`. 
 
-# Run onreal device (NEW!)
+# Run on real device (NEW!)
 6 bits parity check
 ```
 run_exp.py --exp_name pc_6 --sub_exp_name te_pc_real_device
